@@ -1,0 +1,105 @@
+{##}
+{#{% extends "base.html" %}#}
+{##}
+{#{% block title %}Register - Ticket Sales System{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<div class="form-container">#}
+{#  <h2>Register</h2>#}
+{#  <form method="POST" action="{{ url_for('main.register') }}">#}
+{#    {{ form.hidden_tag() }}#}
+{#    <div class="form-group">#}
+{#      {{ form.username.label }}<br>#}
+{#      {{ form.username(class="form-control") }}#}
+{#      {% for error in form.username.errors %}#}
+{#        <span class="error">{{ error }}</span>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#      {{ form.email.label }}<br>#}
+{#      {{ form.email(class="form-control") }}#}
+{#      {% for error in form.email.errors %}#}
+{#        <span class="error">{{ error }}</span>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#      {{ form.password.label }}<br>#}
+{#      {{ form.password(class="form-control") }}#}
+{#      {% for error in form.password.errors %}#}
+{#        <span class="error">{{ error }}</span>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#      {{ form.confirm_password.label }}<br>#}
+{#      {{ form.confirm_password(class="form-control") }}#}
+{#      {% for error in form.confirm_password.errors %}#}
+{#        <span class="error">{{ error }}</span>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#      {{ form.user_type.label }}<br>#}
+{#      {{ form.user_type(class="form-control") }}#}
+{#      {% for error in form.user_type.errors %}#}
+{#        <span class="error">{{ error }}</span>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{#    <div class="form-group">#}
+{#      {{ form.submit(class="btn") }}#}
+{#    </div>#}
+{#  </form>#}
+{#  <p>Already have an account? <a href="{{ url_for('main.login') }}">Login here</a></p>#}
+{#</div>#}
+{#{% endblock %}#}
+
+
+{% extends "base.html" %}
+
+{% block title %}Register - Ticket Sales System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Register</h2>
+  <form method="POST" action="{{ url_for('main.register') }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.username.label }}<br>
+      {{ form.username(class="form-control") }}
+      {% for error in form.username.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.email.label }}<br>
+      {{ form.email(class="form-control") }}
+      {% for error in form.email.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.password.label }}<br>
+      {{ form.password(class="form-control") }}
+      {% for error in form.password.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.confirm_password.label }}<br>
+      {{ form.confirm_password(class="form-control") }}
+      {% for error in form.confirm_password.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.user_type.label }}<br>
+      {{ form.user_type(class="form-control") }}
+      {% for error in form.user_type.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class="btn") }}
+    </div>
+  </form>
+  <p>Already have an account? <a href="{{ url_for('main.login') }}">Login here</a></p>
+</div>
+{% endblock %}
