@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Event - Ticket Sales Platform{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Edit Event</h2>
+  <form method="POST" action="{{ url_for('main.edit_event', event_id=event.id) }}" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.title.label }}<br>
+      {{ form.title(class="form-control") }}
+      {% for error in form.title.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.description.label }}<br>
+      {{ form.description(class="form-control") }}
+      {% for error in form.description.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.event_date.label }}<br>
+      {{ form.event_date(class="form-control") }}
+      {% for error in form.event_date.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.price.label }}<br>
+      {{ form.price(class="form-control") }}
+      {% for error in form.price.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.total_tickets.label }}<br>
+      {{ form.total_tickets(class="form-control") }}
+      {% for error in form.total_tickets.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.image.label }}<br>
+      {{ form.image(class="form-control") }}
+      {% for error in form.image.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class="btn") }}
+    </div>
+  </form>
+</div>
+{% endblock %}
