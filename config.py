@@ -12,11 +12,12 @@ class Config:
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Flask-Mail Configuration (for production, update these values)
+    # Flask-Mail Configuration for Gmail (Using TLS on port 587)
     MAIL_SERVER = os.environ.get("MAIL_SERVER") or "smtp.gmail.com"
     MAIL_PORT = int(os.environ.get("MAIL_PORT") or 587)
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False  # Typically False when using TLS on port 587
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME") or "asmahpaakwesi59@gmail.com"
-    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or "rwyp egon cawm bzih"
+    # IMPORTANT: If you have 2FA enabled, use an app password here.
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or "mpnw meyk nebj linf"
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER") or "asmahpaakwesi59@gmail.com"

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Buy Tickets - {{ event.title }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Buy Tickets for "{{ event.title }}"</h2>
+  <p>Ticket Price: GHC{{ event.price }}</p>
+  <form method="POST" action="{{ url_for('main.buy_ticket', event_id=event.id) }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.email.label }}<br>
+      {{ form.email(class="form-control") }}
+      {% for error in form.email.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.quantity.label }}<br>
+      {{ form.quantity(class="form-control") }}
+      {% for error in form.quantity.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div class="form-group">
+      {{ form.submit(class="btn") }}
+    </div>
+  </form>
+</div>
+{% endblock %}

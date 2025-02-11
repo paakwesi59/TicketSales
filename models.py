@@ -54,6 +54,7 @@ class Event(db.Model):
     event_date = db.Column(db.DateTime, nullable=False)
     price = db.Column(db.Float, nullable=False)
     total_tickets = db.Column(db.Integer, nullable=False)
+    tickets_sold = db.Column(db.Integer, default=0, nullable=False)
     image = db.Column(db.String(255), nullable=True)  # stores filename of the event image
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

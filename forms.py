@@ -36,3 +36,8 @@ class EventForm(FlaskForm):
     total_tickets = IntegerField("Total Tickets", validators=[DataRequired()])
     image = FileField("Event Image", validators=[FileAllowed(['jpg', 'jpeg', 'png', 'gif'], "Images only!")])
     submit = SubmitField("Submit")
+
+class TicketPurchaseForm(FlaskForm):
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    quantity = IntegerField("Number of Tickets", validators=[DataRequired()])
+    submit = SubmitField("Buy Tickets")

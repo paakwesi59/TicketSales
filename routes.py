@@ -6,7 +6,8 @@ from flask_mail import Message
 from datetime import datetime
 from app import db, bcrypt, mail
 from models import User, Event
-from forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, EventForm
+from forms import (RegistrationForm, LoginForm, ForgotPasswordForm,
+                   ResetPasswordForm, EventForm, TicketPurchaseForm)
 
 main = Blueprint('main', __name__)
 
@@ -26,6 +27,22 @@ def send_reset_email(user):
     msg.body = f"Hello {user.username},\n\nTo reset your password, please click the link below:\n{reset_url}\n\nIf you did not request a password reset, please ignore this email."
     mail.send(msg)
 
+def send_ticket_email(user_email, event, quantity):
+    subject = f"Your Ticket Purchase for {event.title}"
+    msg = Message(subject, sender=current_app.config["MAIL_DEFAULT_SENDER"], recipients=[user_email])
+    msg.body = f"""Hello,
+
+You have successfully purchased {quantity} ticket(s) for the event:
+Title: {event.title}
+Description: {event.description}
+Event Date & Time: {event.event_date.strftime('%B %d, %Y %I:%M %p')}
+Ticket Price: GHC{event.price}
+Total Tickets Purchased: {quantity}
+
+Thank you for your purchase!
+"""
+    mail.send(msg)
+
 @main.route("/")
 def home():
     if current_user.is_authenticated:
@@ -34,13 +51,13 @@ def home():
 
 @main.route("/events")
 def events():
+    # Display only upcoming events.
     events = Event.query.filter(Event.event_date >= datetime.utcnow()).order_by(Event.event_date).all()
     return render_template("events.html", events=events)
 
 @main.route("/event/new", methods=["GET", "POST"])
 @login_required
 def new_event():
-    # Only event organizers can create events.
     if current_user.user_type != "event_organizer":
         flash("Only event organizers can create events.", "danger")
         return redirect(url_for("main.dashboard"))
@@ -54,7 +71,6 @@ def new_event():
             total_tickets=form.total_tickets.data,
             created_by=current_user.id
         )
-        # Handle image upload
         if form.image.data:
             file = form.image.data
             filename = secure_filename(file.filename)
@@ -101,6 +117,26 @@ def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     countdown = (event.event_date - datetime.utcnow()).total_seconds()
     return render_template("event_detail.html", event=event, countdown=countdown)
+
+@main.route("/event/<int:event_id>/buy", methods=["GET", "POST"])
+def buy_ticket(event_id):
+    event = Event.query.get_or_404(event_id)
+    form = TicketPurchaseForm()
+    if form.validate_on_submit():
+        quantity = form.quantity.data
+        available = event.total_tickets - event.tickets_sold
+        if quantity > available:
+            flash(f"Only {available} tickets are available.", "danger")
+            return redirect(url_for("main.buy_ticket", event_id=event.id))
+        # Update the number of tickets sold.
+        event.tickets_sold += quantity
+        db.session.commit()
+        # Send ticket details email.
+        user_email = form.email.data
+        send_ticket_email(user_email, event, quantity)
+        flash("Tickets purchased successfully! Check your email for details.", "success")
+        return redirect(url_for("main.event_detail", event_id=event.id))
+    return render_template("buy_ticket.html", form=form, event=event)
 
 @main.route("/register", methods=["GET", "POST"])
 def register():
