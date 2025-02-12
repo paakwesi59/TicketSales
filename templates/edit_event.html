@@ -7,6 +7,7 @@
   <h2>Edit Event</h2>
   <form method="POST" action="{{ url_for('main.edit_event', event_id=event.id) }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
+
     <div class="form-group">
       {{ form.title.label }}<br>
       {{ form.title(class="form-control") }}
@@ -14,6 +15,7 @@
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
+
     <div class="form-group">
       {{ form.description.label }}<br>
       {{ form.description(class="form-control") }}
@@ -21,6 +23,7 @@
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
+
     <div class="form-group">
       {{ form.event_date.label }}<br>
       {{ form.event_date(class="form-control") }}
@@ -28,6 +31,7 @@
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
+
     <div class="form-group">
       {{ form.price.label }}<br>
       {{ form.price(class="form-control") }}
@@ -35,6 +39,7 @@
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
+
     <div class="form-group">
       {{ form.total_tickets.label }}<br>
       {{ form.total_tickets(class="form-control") }}
@@ -42,6 +47,56 @@
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
+
+    <div class="form-group">
+      {{ form.venue.label }}<br>
+      {{ form.venue(class="form-control") }}
+      {% for error in form.venue.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.duration.label }}<br>
+      {{ form.duration(class="form-control") }}
+      {% for error in form.duration.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <!-- Promotion Fields -->
+    <div class="form-group">
+      {{ form.bulk_min_tickets.label }}<br>
+      {{ form.bulk_min_tickets(class="form-control") }}
+      {% for error in form.bulk_min_tickets.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.bulk_discount_percent.label }}<br>
+      {{ form.bulk_discount_percent(class="form-control") }}
+      {% for error in form.bulk_discount_percent.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.free_ticket_min.label }}<br>
+      {{ form.free_ticket_min(class="form-control") }}
+      {% for error in form.free_ticket_min.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      {{ form.free_tickets.label }}<br>
+      {{ form.free_tickets(class="form-control") }}
+      {% for error in form.free_tickets.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+    </div>
+
     <div class="form-group">
       {{ form.image.label }}<br>
       {{ form.image(class="form-control") }}
@@ -49,6 +104,7 @@
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
+
     <div class="form-group">
       {{ form.submit(class="btn") }}
     </div>

@@ -1,3 +1,4 @@
+# config.py
 import os
 
 class Config:
@@ -16,8 +17,7 @@ class Config:
     MAIL_SERVER = os.environ.get("MAIL_SERVER") or "smtp.gmail.com"
     MAIL_PORT = int(os.environ.get("MAIL_PORT") or 587)
     MAIL_USE_TLS = True
-    MAIL_USE_SSL = False  # Typically False when using TLS on port 587
+    MAIL_USE_SSL = False  # TLS requires MAIL_USE_SSL to be False
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME") or "asmahpaakwesi59@gmail.com"
-    # IMPORTANT: If you have 2FA enabled, use an app password here.
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD") or "mpnw meyk nebj linf"
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER") or "asmahpaakwesi59@gmail.com"

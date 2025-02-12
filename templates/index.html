@@ -1,3 +1,44 @@
+{#{% extends "base.html" %}#}
+{##}
+{#{% block title %}Home - Ticket Sales Platform{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<!-- Hero Section -->#}
+{#<div class="hero">#}
+{#  <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="Hero Image" class="hero-image">#}
+{#  <div class="hero-content">#}
+{#    <h1>Experience the Best Events!</h1>#}
+{#    <p>Discover and book tickets for concerts, sports, theater, and more.</p>#}
+{#    <a href="{{ url_for('main.events') }}" class="btn hero-btn">Explore Events</a>#}
+{#  </div>#}
+{#</div>#}
+{##}
+{#<!-- Upcoming Events Section -->#}
+{#<div class="upcoming-events container">#}
+{#  <h2>Upcoming Events</h2>#}
+{#  <div class="events-grid">#}
+{#    <div class="event-card">#}
+{#      <img src="{{ url_for('static', filename='images/concert.jpg') }}" alt="Concert Extravaganza">#}
+{#      <h3>Concert Extravaganza</h3>#}
+{#      <p>Date: March 1, 2025</p>#}
+{#      <a href="#" class="btn">View Details</a>#}
+{#    </div>#}
+{#    <div class="event-card">#}
+{#      <img src="{{ url_for('static', filename='images/sports.jpg') }}" alt="Sports Championship">#}
+{#      <h3>Sports Championship</h3>#}
+{#      <p>Date: March 10, 2025</p>#}
+{#      <a href="#" class="btn">View Details</a>#}
+{#    </div>#}
+{#    <div class="event-card">#}
+{#      <img src="{{ url_for('static', filename='images/movies.jpg') }}" alt="Theater Night">#}
+{#      <h3>Theater Night</h3>#}
+{#      <p>Date: March 15, 2025</p>#}
+{#      <a href="#" class="btn">View Details</a>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+{#{% endblock %}#}
+
 {% extends "base.html" %}
 
 {% block title %}Home - Ticket Sales Platform{% endblock %}
@@ -17,24 +58,20 @@
 <div class="upcoming-events container">
   <h2>Upcoming Events</h2>
   <div class="events-grid">
-    <div class="event-card">
-      <img src="{{ url_for('static', filename='images/concert.jpg') }}" alt="Concert Extravaganza">
-      <h3>Concert Extravaganza</h3>
-      <p>Date: March 1, 2025</p>
-      <a href="#" class="btn">View Details</a>
-    </div>
-    <div class="event-card">
-      <img src="{{ url_for('static', filename='images/sports.jpg') }}" alt="Sports Championship">
-      <h3>Sports Championship</h3>
-      <p>Date: March 10, 2025</p>
-      <a href="#" class="btn">View Details</a>
-    </div>
-    <div class="event-card">
-      <img src="{{ url_for('static', filename='images/movies.jpg') }}" alt="Theater Night">
-      <h3>Theater Night</h3>
-      <p>Date: March 15, 2025</p>
-      <a href="#" class="btn">View Details</a>
-    </div>
+    {% for event in upcoming_events %}
+      <div class="event-card">
+        {% if event.image %}
+          <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }}">
+        {% else %}
+          <img src="{{ url_for('static', filename='images/default_event.jpg') }}" alt="{{ event.title }}">
+        {% endif %}
+        <h3>{{ event.title }}</h3>
+        <p>Date: {{ event.event_date.strftime('%B %d, %Y') }}</p>
+        <a href="{{ url_for('main.event_detail', event_id=event.id) }}" class="btn">View Details</a>
+      </div>
+    {% else %}
+      <p>No upcoming events available.</p>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}
