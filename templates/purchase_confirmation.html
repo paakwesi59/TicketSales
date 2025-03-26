@@ -1,3 +1,31 @@
+{#{% extends "base.html" %}#}
+{##}
+{#{% block title %}Purchase Confirmation - {{ event.title }}{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<div class="container">#}
+{#  <h2>Purchase Confirmation</h2>#}
+{#  <p>You have successfully purchased {{ quantity }} ticket(s) for the event: <strong>{{ event.title }}</strong>.</p>#}
+{#  <div class="ticket-cards">#}
+{#    {% for ticket in tickets %}#}
+{#      <div class="ticket-card">#}
+{#        <h3>{{ event.title }}</h3>#}
+{#        <p><strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>#}
+{#        <p><strong>Venue:</strong> {{ event.venue }}</p>#}
+{#        <p><strong>Time Frame:</strong> {{ event.time_frame }}</p>#}
+{#        <p><strong>Ticket Code:</strong> {{ ticket.ticket_code }}</p>#}
+{#        <img src="{{ url_for('static', filename='tickets_qr/' ~ ticket.qr_code_filename) }}" alt="QR Code">#}
+{#        <p><a href="{{ url_for('main.download_ticket', ticket_id=ticket.id) }}" class="btn">Download Ticket</a></p>#}
+{#      </div>#}
+{#    {% endfor %}#}
+{#  </div>#}
+{#  <p>An email with your ticket details has been sent to your email address.</p>#}
+{#  <p><a href="{{ url_for('main.event_detail', event_id=event.id) }}" class="btn">Back to Event Details</a></p>#}
+{#</div>#}
+{#{% endblock %}#}
+{##}
+
+<!-- In purchase_confirmation.html -->
 {% extends "base.html" %}
 
 {% block title %}Purchase Confirmation - {{ event.title }}{% endblock %}
@@ -12,10 +40,13 @@
         <h3>{{ event.title }}</h3>
         <p><strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
         <p><strong>Venue:</strong> {{ event.venue }}</p>
-        <p><strong>Time Frame:</strong> {{ event.time_frame }}</p>
         <p><strong>Ticket Code:</strong> {{ ticket.ticket_code }}</p>
         <img src="{{ url_for('static', filename='tickets_qr/' ~ ticket.qr_code_filename) }}" alt="QR Code">
-        <p><a href="{{ url_for('main.download_ticket', ticket_id=ticket.id) }}" class="btn">Download Ticket</a></p>
+        <p>
+          <a href="{{ url_for('main.download_ticket', ticket_id=ticket.id, token=ticket.ticket_code) }}" class="btn">
+            Download E-Ticket (PDF)
+          </a>
+        </p>
       </div>
     {% endfor %}
   </div>
