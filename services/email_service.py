@@ -1,11 +1,12 @@
 # services/email_service.py
 from flask_mail import Message
 from flask import url_for, current_app
-from app import mail
+from extensions import mail
+
 
 def send_confirmation_email(user):
     token = user.generate_confirmation_token()
-    confirm_url = url_for("main.confirm_email", token=token, _external=True)
+    confirm_url = url_for("auth.confirm_email", token=token, _external=True)
     subject = "Please confirm your email"
     msg = Message(subject,
                   sender=current_app.config["MAIL_DEFAULT_SENDER"],
@@ -13,9 +14,10 @@ def send_confirmation_email(user):
     msg.body = f"Hello {user.username},\n\nPlease confirm your email by clicking the following link:\n{confirm_url}\n\nThank you!"
     mail.send(msg)
 
+
 def send_reset_email(user):
     token = user.generate_reset_token()
-    reset_url = url_for("main.reset_password", token=token, _external=True)
+    reset_url = url_for("auth.reset_password", token=token, _external=True)
     subject = "Password Reset Request"
     msg = Message(subject,
                   sender=current_app.config["MAIL_DEFAULT_SENDER"],
@@ -23,14 +25,16 @@ def send_reset_email(user):
     msg.body = f"Hello {user.username},\n\nTo reset your password, please click the link below:\n{reset_url}\n\nIf you did not request a password reset, please ignore this email."
     mail.send(msg)
 
+
 def send_ticket_email(user_email, event, quantity, tickets):
     subject = f"Your Ticket Purchase for {event.title}"
     msg = Message(subject,
                   sender=current_app.config["MAIL_DEFAULT_SENDER"],
                   recipients=[user_email])
     ticket_details = "\n".join(
-        [f"Ticket Code: {t.ticket_code} - Download: {url_for('main.download_ticket', ticket_id=t.id, _external=True)}"
-         for t in tickets]
+        [
+            f"Ticket Code: {t.ticket_code} - Download: {url_for('tickets.download_ticket', ticket_id=t.id, token=t.ticket_code, _external=True)}"
+            for t in tickets]
     )
     msg.body = f"""Hello,
 

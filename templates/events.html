@@ -16,7 +16,8 @@
           {% endif %}
           <h3>{{ event.title }}</h3>
           <p>Date: {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
-          <a href="{{ url_for('main.event_detail', event_id=event.id) }}" class="btn">View Details</a>
+          <!-- Corrected URL for event detail -->
+          <a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn">View Details</a>
         </div>
       {% endfor %}
     </div>

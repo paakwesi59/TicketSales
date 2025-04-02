@@ -1,22 +1,3 @@
-{#{% extends "base.html" %}#}
-{##}
-{#{% block title %}Checkout - {{ event.title }}{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#<div class="form-container">#}
-{#  <h2>Checkout</h2>#}
-{#  <p><strong>Event:</strong> {{ event.title }}</p>#}
-{#  <p><strong>Ticket Price:</strong> GHC{{ event.price }}</p>#}
-{#  <p><strong>Quantity:</strong> {{ quantity }}</p>#}
-{#  <p><strong>Total Price:</strong> GHC{{ total_price }}</p>#}
-{#  <form method="POST" action="{{ url_for('main.confirm_purchase', event_id=event.id) }}">#}
-{#    <input type="hidden" name="email" value="{{ email }}">#}
-{#    <input type="hidden" name="quantity" value="{{ quantity }}">#}
-{#    <button type="submit" class="btn">Confirm Purchase & Pay</button>#}
-{#  </form>#}
-{#</div>#}
-{#{% endblock %}#}
-
 {% extends "base.html" %}
 
 {% block title %}Checkout - {{ event.title }}{% endblock %}
@@ -35,12 +16,11 @@
     <p><strong>Free Tickets Awarded:</strong> {{ free_tickets }}</p>
   {% endif %}
   <p><strong>Final Total Price:</strong> GHC{{ "%.2f"|format(final_price) }}</p>
-  <form method="POST" action="{{ url_for('main.confirm_purchase', event_id=event.id) }}">
+  <form method="POST" action="{{ url_for('tickets.confirm_purchase', event_id=event.id) }}">
     <input type="hidden" name="email" value="{{ email }}">
     <input type="hidden" name="quantity" value="{{ quantity }}">
     <button type="submit" class="btn">Confirm Purchase &amp; Pay</button>
   </form>
 </div>
 {% endblock %}
-
 

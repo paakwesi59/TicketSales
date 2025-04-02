@@ -1,87 +1,3 @@
-{#{% extends "base.html" %}#}
-{##}
-{#{% block title %}Create New Event - Ticket Sales Platform{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#<div class="form-container">#}
-{#  <h2>Create New Event</h2>#}
-{#  <form method="POST" action="{{ url_for('main.new_event') }}" enctype="multipart/form-data">#}
-{#    {{ form.hidden_tag() }}#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.title.label }}<br>#}
-{#      {{ form.title(class="form-control") }}#}
-{#      {% for error in form.title.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.description.label }}<br>#}
-{#      {{ form.description(class="form-control") }}#}
-{#      {% for error in form.description.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.event_date.label }}<br>#}
-{#      {{ form.event_date(class="form-control") }}#}
-{#      {% for error in form.event_date.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.price.label }}<br>#}
-{#      {{ form.price(class="form-control") }}#}
-{#      {% for error in form.price.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.total_tickets.label }}<br>#}
-{#      {{ form.total_tickets(class="form-control") }}#}
-{#      {% for error in form.total_tickets.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <!-- Added Venue Field -->#}
-{#    <div class="form-group">#}
-{#      {{ form.venue.label }}<br>#}
-{#      {{ form.venue(class="form-control") }}#}
-{#      {% for error in form.venue.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <!-- Added Time Frame Field -->#}
-{#    <div class="form-group">#}
-{#      {{ form.time_frame.label }}<br>#}
-{#      {{ form.time_frame(class="form-control") }}#}
-{#      {% for error in form.time_frame.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.image.label }}<br>#}
-{#      {{ form.image(class="form-control") }}#}
-{#      {% for error in form.image.errors %}#}
-{#        <span class="error">{{ error }}</span>#}
-{#      {% endfor %}#}
-{#    </div>#}
-{##}
-{#    <div class="form-group">#}
-{#      {{ form.submit(class="btn") }}#}
-{#    </div>#}
-{#  </form>#}
-{#</div>#}
-{#{% endblock %}#}
-
-
 {% extends "base.html" %}
 
 {% block title %}Create New Event - Ticket Sales Platform{% endblock %}
@@ -89,7 +5,7 @@
 {% block content %}
 <div class="form-container">
   <h2>Create New Event</h2>
-  <form method="POST" action="{{ url_for('main.new_event') }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ url_for('events.new_event') }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
     <div class="form-group">
@@ -110,7 +26,7 @@
 
     <div class="form-group">
       {{ form.event_date.label }}<br>
-      {{ form.event_date(class="form-control") }}
+      {{ form.event_date(class="form-control", type="datetime-local") }}
       {% for error in form.event_date.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -118,7 +34,7 @@
 
     <div class="form-group">
       {{ form.price.label }}<br>
-      {{ form.price(class="form-control") }}
+      {{ form.price(class="form-control", type="number", step="0.01") }}
       {% for error in form.price.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -126,7 +42,7 @@
 
     <div class="form-group">
       {{ form.total_tickets.label }}<br>
-      {{ form.total_tickets(class="form-control") }}
+      {{ form.total_tickets(class="form-control", type="number") }}
       {% for error in form.total_tickets.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -142,7 +58,7 @@
 
     <div class="form-group">
       {{ form.duration.label }}<br>
-      {{ form.duration(class="form-control") }}
+      {{ form.duration(class="form-control", type="number", step="0.5") }}
       {% for error in form.duration.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -151,7 +67,7 @@
     <!-- Promotion Fields -->
     <div class="form-group">
       {{ form.bulk_min_tickets.label }}<br>
-      {{ form.bulk_min_tickets(class="form-control") }}
+      {{ form.bulk_min_tickets(class="form-control", type="number") }}
       {% for error in form.bulk_min_tickets.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -159,7 +75,7 @@
 
     <div class="form-group">
       {{ form.bulk_discount_percent.label }}<br>
-      {{ form.bulk_discount_percent(class="form-control") }}
+      {{ form.bulk_discount_percent(class="form-control", type="number", step="0.1") }}
       {% for error in form.bulk_discount_percent.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -167,7 +83,7 @@
 
     <div class="form-group">
       {{ form.free_ticket_min.label }}<br>
-      {{ form.free_ticket_min(class="form-control") }}
+      {{ form.free_ticket_min(class="form-control", type="number") }}
       {% for error in form.free_ticket_min.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -175,7 +91,7 @@
 
     <div class="form-group">
       {{ form.free_tickets.label }}<br>
-      {{ form.free_tickets(class="form-control") }}
+      {{ form.free_tickets(class="form-control", type="number") }}
       {% for error in form.free_tickets.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
@@ -183,14 +99,14 @@
 
     <div class="form-group">
       {{ form.image.label }}<br>
-      {{ form.image(class="form-control") }}
+      {{ form.image(class="form-control", type="file") }}
       {% for error in form.image.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
     </div>
 
     <div class="form-group">
-      {{ form.submit(class="btn") }}
+      {{ form.submit(class="btn btn-primary") }}
     </div>
   </form>
 </div>

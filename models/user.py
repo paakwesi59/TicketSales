@@ -3,7 +3,6 @@ from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
 from models import db
 
-# Helper function to get a serializer using the app’s SECRET_KEY via current_app
 def get_serializer():
     from flask import current_app
     return URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
@@ -14,7 +13,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    user_type = db.Column(db.String(50), nullable=False)  # e.g., 'event_organizer'
+    user_type = db.Column(db.String(50), nullable=False)
     confirmed = db.Column(db.Boolean, default=False)
 
     events = db.relationship('Event', backref='organizer', lazy=True)

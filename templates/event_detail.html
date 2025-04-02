@@ -1,51 +1,3 @@
-{#{% extends "base.html" %}#}
-{##}
-{#{% block title %}Event Details - Ticket Sales Platform{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#<div class="container event-detail">#}
-{#  <h2>{{ event.title }}</h2>#}
-{#  {% if event.image %}#}
-{#    <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }}" class="event-image">#}
-{#  {% endif %}#}
-{#  <p>{{ event.description }}</p>#}
-{#  <p><strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>#}
-{#  <p><strong>Ticket Price:</strong> GHC{{ event.price }}</p>#}
-{#  {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}#}
-{#    <p><strong>Total Tickets:</strong> {{ event.total_tickets }}</p>#}
-{#    <p><strong>Remaining Tickets:</strong> {{ event.total_tickets - event.tickets_sold }}</p>#}
-{#  {% endif %}#}
-{#  <p id="countdown"></p>#}
-{#  <script>#}
-{#    var eventDate = new Date("{{ event.event_date.isoformat() }}");#}
-{#    var countdownElement = document.getElementById("countdown");#}
-{#    function updateCountdown() {#}
-{#      var now = new Date();#}
-{#      var diff = eventDate - now;#}
-{#      if (diff <= 0) {#}
-{#        countdownElement.innerHTML = "The event has started!";#}
-{#        clearInterval(timerInterval);#}
-{#        return;#}
-{#      }#}
-{#      var days = Math.floor(diff / (1000 * 60 * 60 * 24));#}
-{#      var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);#}
-{#      var minutes = Math.floor((diff / (1000 * 60)) % 60);#}
-{#      var seconds = Math.floor((diff / 1000) % 60);#}
-{#      countdownElement.innerHTML = "Starts in " + days + "d " + hours + "h " + minutes + "m " + seconds + "s";#}
-{#    }#}
-{#    var timerInterval = setInterval(updateCountdown, 1000);#}
-{#    updateCountdown();#}
-{#  </script>#}
-{#  {% if not (current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by) %}#}
-{#    <p><a href="{{ url_for('main.buy_ticket', event_id=event.id) }}" class="btn">Buy Tickets</a></p>#}
-{#  {% endif %}#}
-{#  {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}#}
-{#    <p><a href="{{ url_for('main.edit_event', event_id=event.id) }}" class="btn">Edit Event</a></p>#}
-{#  {% endif %}#}
-{#</div>#}
-{#{% endblock %}#}
-
-
 {% extends "base.html" %}
 
 {% block title %}Event Details - Ticket Sales Platform{% endblock %}
@@ -101,11 +53,12 @@
   </script>
 
   {% if not (current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by) %}
-    <p><a href="{{ url_for('main.buy_ticket', event_id=event.id) }}" class="btn">Buy Tickets</a></p>
+    <!-- Update the endpoint to use the 'tickets' blueprint -->
+    <p><a href="{{ url_for('tickets.buy_ticket', event_id=event.id) }}" class="btn">Buy Tickets</a></p>
   {% endif %}
 
   {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}
-    <p><a href="{{ url_for('main.edit_event', event_id=event.id) }}" class="btn">Edit Event</a></p>
+    <p><a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn">Edit Event</a></p>
   {% endif %}
 </div>
 {% endblock %}

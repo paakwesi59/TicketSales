@@ -11,20 +11,18 @@ class Event(db.Model):
     price = db.Column(db.Float, nullable=False)
     total_tickets = db.Column(db.Integer, nullable=False)
     tickets_sold = db.Column(db.Integer, default=0, nullable=False)
-    image = db.Column(db.String(255), nullable=True)  # filename for event image
+    image = db.Column(db.String(255), nullable=True)
     venue = db.Column(db.String(150), nullable=False)
-    duration = db.Column(db.Float, nullable=False)  # duration in hours
+    duration = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    # Promotion fields (optional)
     bulk_min_tickets = db.Column(db.Integer, nullable=True)
     bulk_discount_percent = db.Column(db.Float, nullable=True)
     free_ticket_min = db.Column(db.Integer, nullable=True)
     free_tickets = db.Column(db.Integer, nullable=True)
 
-    # Cascade delete tickets when an event is deleted
     tickets = db.relationship('Ticket', backref='event', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):

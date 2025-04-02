@@ -5,11 +5,9 @@ import qrcode
 from datetime import datetime
 from flask import current_app
 from models.ticket import Ticket
-from app import db
-
+from extensions import db
 
 def process_ticket_purchase(event, email, quantity):
-    # Apply promotion rules
     discount = 0.0
     free_tickets = 0
     if event.bulk_min_tickets and event.bulk_discount_percent:
@@ -26,8 +24,6 @@ def process_ticket_purchase(event, email, quantity):
                 "message": f"Only {available} tickets are available (including promotional free tickets)."}
 
     final_price = event.price * quantity - discount
-
-    # Update sold count (including free tickets)
     event.tickets_sold += total_requested
     db.session.commit()
 
@@ -50,17 +46,12 @@ def process_ticket_purchase(event, email, quantity):
         db.session.add(ticket)
         return ticket
 
-    # Generate purchased tickets
     for _ in range(quantity):
-        ticket = generate_ticket()
-        tickets_generated.append(ticket)
-    # Generate free tickets
+        tickets_generated.append(generate_ticket())
     for _ in range(free_tickets):
-        ticket = generate_ticket()
-        tickets_generated.append(ticket)
+        tickets_generated.append(generate_ticket())
 
     db.session.commit()
-
     return {
         "success": True,
         "tickets": tickets_generated,

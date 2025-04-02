@@ -10,17 +10,17 @@
   <nav>
     <div class="container">
       <ul>
-        <li><a href="{{ url_for('main.home') }}">Home</a></li>
-        <li><a href="{{ url_for('main.events') }}">Events</a></li>
+        <li><a href="{{ url_for('events.home') }}">Home</a></li>
+        <li><a href="{{ url_for('events.list_events') }}">Events</a></li>
         {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+          <li><a href="{{ url_for('events.dashboard') }}">Dashboard</a></li>
           {% if current_user.user_type == 'event_organizer' %}
-            <li><a href="{{ url_for('main.new_event') }}">Create Event</a></li>
+            <li><a href="{{ url_for('events.new_event') }}">Create Event</a></li>
           {% endif %}
-          <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
         {% else %}
-          <li><a href="{{ url_for('main.register') }}">Register as Event Organiser</a></li>
-          <li><a href="{{ url_for('main.login') }}">Login</a></li>
+          <li><a href="{{ url_for('auth.register') }}">Register as Event Organiser</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
         {% endif %}
       </ul>
     </div>

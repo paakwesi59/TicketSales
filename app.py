@@ -1,33 +1,38 @@
 # app.py
 from flask import Flask
 from config import Config
-from models import db  # Our SQLAlchemy instance & models
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-from flask_migrate import Migrate
-from flask_mail import Mail
+from extensions import db, bcrypt, mail, migrate, login_manager
 
-app = Flask(__name__)
-app.config.from_object(Config)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
 
-# Initialize extensions
-db.init_app(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
-login_manager.login_view = "main.login"  # Using the 'main' blueprint
-migrate = Migrate(app, db)
-mail = Mail(app)
+    # Initialize extensions with app
+    db.init_app(app)
+    bcrypt.init_app(app)
+    mail.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+    login_manager.login_view = "auth.login"  # Use the auth blueprint's login route
 
-# Import the User model for the user loader
-from models.user import User
+    # Import models so they are registered with SQLAlchemy
+    from models.user import User
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
-# Register the blueprint from the routes package
-from routes.main import main as main_blueprint
-app.register_blueprint(main_blueprint)
+    # Register blueprints
+    from routes.auth import auth as auth_blueprint
+    from routes.events import events as events_blueprint
+    from routes.tickets import tickets as tickets_blueprint
+
+    app.register_blueprint(auth_blueprint)
+    app.register_blueprint(events_blueprint)
+    app.register_blueprint(tickets_blueprint)
+
+    return app
 
 if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True)
