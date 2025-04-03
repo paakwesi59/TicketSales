@@ -1,64 +1,54 @@
 {% extends "base.html" %}
-
-{% block title %}Event Details - Ticket Sales Platform{% endblock %}
-
+{% block title %}Event Details - {{ event.title }}{% endblock %}
 {% block content %}
-<div class="container event-detail">
+<section class="container">
   <h2>{{ event.title }}</h2>
   {% if event.image %}
-    <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }}" class="event-image">
+    <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }}" class="event-card__image">
   {% endif %}
-
   <p>{{ event.description }}</p>
-  <p><strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
-  <p><strong>Venue:</strong> {{ event.venue }}</p>
-  <p><strong>Duration:</strong> {{ event.duration }} hour{{ 's' if event.duration != 1 else '' }}</p>
-  <p><strong>Ticket Price:</strong> GHC{{ event.price }}</p>
-
+  <p><i class="fas fa-calendar-alt fa-icon"></i> <strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
+  <p><i class="fas fa-map-marker-alt fa-icon"></i> <strong>Venue:</strong> {{ event.venue }}</p>
+  <p><i class="fas fa-clock fa-icon"></i> <strong>Duration:</strong> {{ event.duration }} hour{{ 's' if event.duration != 1 else '' }}</p>
+  <p><i class="fas fa-money-bill fa-icon"></i> <strong>Ticket Price:</strong> GHC{{ event.price }}</p>
   {% if event.bulk_min_tickets and event.bulk_discount_percent %}
-    <p><strong>Bulk Purchase Offer:</strong> Buy at least {{ event.bulk_min_tickets }} tickets to receive a {{ event.bulk_discount_percent }}% discount.</p>
+    <p><i class="fas fa-tag fa-icon"></i> <strong>Bulk Purchase Offer:</strong> Buy at least {{ event.bulk_min_tickets }} tickets to receive a {{ event.bulk_discount_percent }}% discount.</p>
   {% endif %}
-
   {% if event.free_ticket_min and event.free_tickets %}
-    <p><strong>Free Tickets Offer:</strong> Buy at least {{ event.free_ticket_min }} tickets to receive {{ event.free_tickets }} free ticket{{ 's' if event.free_tickets > 1 else '' }}.</p>
+    <p><i class="fas fa-gift fa-icon"></i> <strong>Free Tickets Offer:</strong> Buy at least {{ event.free_ticket_min }} tickets to receive {{ event.free_tickets }} free ticket{{ 's' if event.free_tickets > 1 else '' }}.</p>
   {% endif %}
-
   {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}
     <hr>
-    <p><strong>Total Tickets:</strong> {{ event.total_tickets }}</p>
-    <p><strong>Tickets Sold:</strong> {{ event.tickets_sold }}</p>
-    <p><strong>Remaining Tickets:</strong> {{ event.total_tickets - event.tickets_sold }}</p>
+    <p><i class="fas fa-ticket-alt fa-icon"></i> <strong>Total Tickets:</strong> {{ event.total_tickets }}</p>
+    <p><i class="fas fa-tickets fa-icon"></i> <strong>Tickets Sold:</strong> {{ event.tickets_sold }}</p>
+    <p><i class="fas fa-ticket-alt fa-icon"></i> <strong>Remaining Tickets:</strong> {{ event.total_tickets - event.tickets_sold }}</p>
   {% endif %}
-
-  <p id="countdown"></p>
+  <p id="countdown"><i class="fas fa-hourglass-start fa-icon"></i> </p>
   <script>
-    var eventDate = new Date("{{ event.event_date.isoformat() }}");
-    var countdownElement = document.getElementById("countdown");
+    const eventDate = new Date("{{ event.event_date.isoformat() }}");
+    const countdownElement = document.getElementById("countdown");
     function updateCountdown() {
-      var now = new Date();
-      var diff = eventDate - now;
+      const now = new Date();
+      const diff = eventDate - now;
       if (diff <= 0) {
-        countdownElement.innerHTML = "The event has started!";
+        countdownElement.innerHTML = "<i class='fas fa-hourglass-end fa-icon'></i> The event has started!";
         clearInterval(timerInterval);
         return;
       }
-      var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      var hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      var minutes = Math.floor((diff / (1000 * 60)) % 60);
-      var seconds = Math.floor((diff / 1000) % 60);
-      countdownElement.innerHTML = "Starts in " + days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      countdownElement.innerHTML = `<i class="fas fa-hourglass-start fa-icon"></i> Starts in ${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
-    var timerInterval = setInterval(updateCountdown, 1000);
+    const timerInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
   </script>
-
   {% if not (current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by) %}
-    <!-- Update the endpoint to use the 'tickets' blueprint -->
-    <p><a href="{{ url_for('tickets.buy_ticket', event_id=event.id) }}" class="btn">Buy Tickets</a></p>
+    <p><a href="{{ url_for('tickets.buy_ticket', event_id=event.id) }}" class="btn"><i class="fas fa-shopping-cart fa-icon"></i> Buy Tickets</a></p>
   {% endif %}
-
   {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}
-    <p><a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn">Edit Event</a></p>
+    <p><a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn"><i class="fas fa-edit fa-icon"></i> Edit Event</a></p>
   {% endif %}
-</div>
+</section>
 {% endblock %}

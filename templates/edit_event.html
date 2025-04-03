@@ -1,125 +1,41 @@
 {% extends "base.html" %}
-
 {% block title %}Edit Event - Ticket Sales Platform{% endblock %}
-
 {% block content %}
-<div class="form-container">
-  <h2>Edit Event</h2>
+<section class="form-container">
+  <h2 class="form-container__title"><i class="fas fa-edit fa-icon"></i> Edit Event</h2>
   <form method="POST" action="{{ url_for('events.edit_event', event_id=event.id) }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-
+    {% for field, icon in [
+      (form.title, 'fa-heading'),
+      (form.description, 'fa-align-left'),
+      (form.event_date, 'fa-calendar-alt'),
+      (form.price, 'fa-money-bill'),
+      (form.total_tickets, 'fa-ticket-alt'),
+      (form.venue, 'fa-map-marker-alt'),
+      (form.duration, 'fa-clock'),
+      (form.bulk_min_tickets, 'fa-sort-numeric-up'),
+      (form.bulk_discount_percent, 'fa-tag'),
+      (form.free_ticket_min, 'fa-gift'),
+      (form.free_tickets, 'fa-tickets'),
+      (form.image, 'fa-image')
+    ] %}
+      <div class="form-group">
+        <label class="form-group__label" for="{{ field.id }}"><i class="fas {{ icon }} fa-icon"></i> {{ field.label.text }}</label>
+        {{ field(class="form-group__input", id=field.id) }}
+        {% for error in field.errors %}
+          <span class="form-group__error">{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    {% if event.image %}
+      <div class="form-group">
+        <label class="form-group__label"><i class="fas fa-image fa-icon"></i> Current Image:</label>
+        <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="Event Image" class="event-card__image">
+      </div>
+    {% endif %}
     <div class="form-group">
-      {{ form.title.label }}<br>
-      {{ form.title(class="form-control") }}
-      {% for error in form.title.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.description.label }}<br>
-      {{ form.description(class="form-control") }}
-      {% for error in form.description.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.event_date.label }}<br>
-      {{ form.event_date(class="form-control") }}
-      {% for error in form.event_date.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.price.label }}<br>
-      {{ form.price(class="form-control") }}
-      {% for error in form.price.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.total_tickets.label }}<br>
-      {{ form.total_tickets(class="form-control") }}
-      {% for error in form.total_tickets.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.venue.label }}<br>
-      {{ form.venue(class="form-control") }}
-      {% for error in form.venue.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.duration.label }}<br>
-      {{ form.duration(class="form-control") }}
-      {% for error in form.duration.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <!-- Promotion Fields -->
-    <div class="form-group">
-      {{ form.bulk_min_tickets.label }}<br>
-      {{ form.bulk_min_tickets(class="form-control") }}
-      {% for error in form.bulk_min_tickets.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.bulk_discount_percent.label }}<br>
-      {{ form.bulk_discount_percent(class="form-control") }}
-      {% for error in form.bulk_discount_percent.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.free_ticket_min.label }}<br>
-      {{ form.free_ticket_min(class="form-control") }}
-      {% for error in form.free_ticket_min.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.free_tickets.label }}<br>
-      {{ form.free_tickets(class="form-control") }}
-      {% for error in form.free_tickets.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <!-- Current Image Preview -->
-    <div class="form-group">
-      <label>Current Image:</label><br>
-      {% if event.image %}
-        <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="Event Image" style="max-width:200px;">
-      {% else %}
-        <p>No image uploaded.</p>
-      {% endif %}
-    </div>
-
-    <!-- Image Upload Field -->
-    <div class="form-group">
-      {{ form.image.label }}<br>
-      {{ form.image(class="form-control-file") }}
-      {% for error in form.image.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-      <small class="form-text text-muted">Leave blank to keep the current image.</small>
-    </div>
-
-    <div class="form-group">
-      {{ form.submit(class="btn btn-primary") }}
+      <button type="submit" class="btn"><i class="fas fa-save fa-icon"></i> Save Changes</button>
     </div>
   </form>
-</div>
+</section>
 {% endblock %}

@@ -1,28 +1,19 @@
 {% extends "base.html" %}
-
 {% block title %}Events - Ticket Sales Platform{% endblock %}
-
 {% block content %}
-<div class="container">
-  <h2>Upcoming Events</h2>
-  {% if events %}
-    <div class="events-grid">
-      {% for event in events %}
-        <div class="event-card">
-          {% if event.image %}
-            <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }}">
-          {% else %}
-            <img src="{{ url_for('static', filename='images/default-event.jpg') }}" alt="Default Event Image">
-          {% endif %}
-          <h3>{{ event.title }}</h3>
-          <p>Date: {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
-          <!-- Corrected URL for event detail -->
-          <a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn">View Details</a>
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <p>No upcoming events at the moment. Check back later!</p>
-  {% endif %}
-</div>
+<section class="container">
+  <h2><i class="fas fa-calendar-alt fa-icon"></i> Upcoming Events</h2>
+  <div class="events-grid">
+    {% for event in events %}
+      <article class="event-card">
+        <img src="{{ url_for('static', filename='event_images/' ~ event.image if event.image else 'images/default-event.jpg') }}" alt="{{ event.title }}" class="event-card__image">
+        <h3 class="event-card__title">{{ event.title }}</h3>
+        <p class="event-card__text"><i class="fas fa-calendar-alt fa-icon"></i> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
+        <a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn"><i class="fas fa-info-circle fa-icon"></i> View Details</a>
+      </article>
+    {% else %}
+      <p><i class="fas fa-exclamation-circle fa-icon"></i> No upcoming events at the moment.</p>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}

@@ -1,113 +1,35 @@
 {% extends "base.html" %}
-
 {% block title %}Create New Event - Ticket Sales Platform{% endblock %}
-
 {% block content %}
-<div class="form-container">
-  <h2>Create New Event</h2>
+<section class="form-container">
+  <h2 class="form-container__title"><i class="fas fa-plus-circle fa-icon"></i> Create New Event</h2>
   <form method="POST" action="{{ url_for('events.new_event') }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-
+    {% for field, icon in [
+      (form.title, 'fa-heading'),
+      (form.description, 'fa-align-left'),
+      (form.event_date, 'fa-calendar-alt'),
+      (form.price, 'fa-money-bill'),
+      (form.total_tickets, 'fa-ticket-alt'),
+      (form.venue, 'fa-map-marker-alt'),
+      (form.duration, 'fa-clock'),
+      (form.bulk_min_tickets, 'fa-sort-numeric-up'),
+      (form.bulk_discount_percent, 'fa-tag'),
+      (form.free_ticket_min, 'fa-gift'),
+      (form.free_tickets, 'fa-tickets'),
+      (form.image, 'fa-image')
+    ] %}
+      <div class="form-group">
+        <label class="form-group__label" for="{{ field.id }}"><i class="fas {{ icon }} fa-icon"></i> {{ field.label.text }}</label>
+        {{ field(class="form-group__input", id=field.id) }}
+        {% for error in field.errors %}
+          <span class="form-group__error">{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% endfor %}
     <div class="form-group">
-      {{ form.title.label }}<br>
-      {{ form.title(class="form-control") }}
-      {% for error in form.title.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.description.label }}<br>
-      {{ form.description(class="form-control") }}
-      {% for error in form.description.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.event_date.label }}<br>
-      {{ form.event_date(class="form-control", type="datetime-local") }}
-      {% for error in form.event_date.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.price.label }}<br>
-      {{ form.price(class="form-control", type="number", step="0.01") }}
-      {% for error in form.price.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.total_tickets.label }}<br>
-      {{ form.total_tickets(class="form-control", type="number") }}
-      {% for error in form.total_tickets.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.venue.label }}<br>
-      {{ form.venue(class="form-control") }}
-      {% for error in form.venue.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.duration.label }}<br>
-      {{ form.duration(class="form-control", type="number", step="0.5") }}
-      {% for error in form.duration.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <!-- Promotion Fields -->
-    <div class="form-group">
-      {{ form.bulk_min_tickets.label }}<br>
-      {{ form.bulk_min_tickets(class="form-control", type="number") }}
-      {% for error in form.bulk_min_tickets.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.bulk_discount_percent.label }}<br>
-      {{ form.bulk_discount_percent(class="form-control", type="number", step="0.1") }}
-      {% for error in form.bulk_discount_percent.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.free_ticket_min.label }}<br>
-      {{ form.free_ticket_min(class="form-control", type="number") }}
-      {% for error in form.free_ticket_min.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.free_tickets.label }}<br>
-      {{ form.free_tickets(class="form-control", type="number") }}
-      {% for error in form.free_tickets.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.image.label }}<br>
-      {{ form.image(class="form-control", type="file") }}
-      {% for error in form.image.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-group">
-      {{ form.submit(class="btn btn-primary") }}
+      <button type="submit" class="btn"><i class="fas fa-save fa-icon"></i> Create Event</button>
     </div>
   </form>
-</div>
+</section>
 {% endblock %}
