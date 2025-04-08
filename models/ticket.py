@@ -12,5 +12,9 @@ class Ticket(db.Model):
     purchase_time = db.Column(db.DateTime, default=datetime.utcnow)
     qr_code_filename = db.Column(db.String(255), nullable=False)
 
+    # NEW FIELDS
+    is_checked_in = db.Column(db.Boolean, default=False)
+    check_in_time = db.Column(db.DateTime)
+
     def __repr__(self):
         return f"<Ticket {self.ticket_code}>"

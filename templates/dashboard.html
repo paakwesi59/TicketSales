@@ -1,49 +1,73 @@
 {% extends "base.html" %}
+
 {% block title %}Dashboard - Ticket Sales Platform{% endblock %}
+
 {% block content %}
-<section class="dashboard">
-  <h2 class="dashboard__title"><i class="fas fa-tachometer-alt fa-icon"></i> Welcome, {{ current_user.username }}!</h2>
+<main class="dashboard container">
+  <header class="dashboard__header">
+    <h2 class="dashboard__title">
+      <i class="fas fa-tachometer-alt fa-icon"></i> Welcome, {{ current_user.username }}!
+    </h2>
+  </header>
+
   {% if current_user.user_type == 'event_organizer' %}
-    <h3>Your Event Sales Summary</h3>
-    {% if events_data %}
-      <table class="dashboard__table">
-        <thead>
-          <tr>
-            <th><i class="fas fa-calendar-alt fa-icon"></i> Event Title</th>
-            <th><i class="fas fa-clock fa-icon"></i> Event Date</th>
-            <th><i class="fas fa-ticket-alt fa-icon"></i> Total Tickets</th>
-            <th><i class="fas fa-tickets fa-icon"></i> Tickets Sold</th>
-            <th><i class="fas fa-ticket-alt fa-icon"></i> Tickets Remaining</th>
-            <th><i class="fas fa-money-bill fa-icon"></i> Actual Revenue</th>
-            <th><i class="fas fa-money-bill-alt fa-icon"></i> Lost Revenue</th>
-            <th><i class="fas fa-cogs fa-icon"></i> Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for event in events_data %}
+    <section class="dashboard__sales-summary">
+      <h3 class="dashboard__subtitle">Your Event Sales Summary</h3>
+      {% if events_data %}
+        <table class="dashboard__table">
+          <thead class="dashboard__table-head">
             <tr>
-              <td>{{ event.title }}</td>
-              <td>{{ event.event_date.strftime('%Y-%m-%d %I:%M %p') }}</td>
-              <td>{{ event.total_tickets }}</td>
-              <td>{{ event.tickets_sold }}</td>
-              <td>{{ event.tickets_remaining }}</td>
-              <td>GHC{{ "%.2f"|format(event.actual_revenue) }}</td>
-              <td>GHC{{ "%.2f"|format(event.lost_revenue) }}</td>
-              <td>
-                <a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn"><i class="fas fa-edit fa-icon"></i> Edit</a>
-                <form action="{{ url_for('events.delete_event', event_id=event.id) }}" method="POST" style="display:inline;">
-                  <button type="submit" class="btn btn--secondary" onclick="return confirm('Are you sure you want to delete this event?');"><i class="fas fa-trash fa-icon"></i> Delete</button>
-                </form>
-              </td>
+              <th><i class="fas fa-calendar-alt fa-icon"></i> Event Title</th>
+              <th><i class="fas fa-clock fa-icon"></i> Event Date</th>
+              <th><i class="fas fa-ticket-alt fa-icon"></i> Total Tickets</th>
+              <th><i class="fas fa-tickets fa-icon"></i> Tickets Sold</th>
+              <th><i class="fas fa-ticket-alt fa-icon"></i> Tickets Remaining</th>
+              <th><i class="fas fa-money-bill fa-icon"></i> Actual Revenue</th>
+              <th><i class="fas fa-money-bill-alt fa-icon"></i> Lost Revenue</th>
+              <th><i class="fas fa-cogs fa-icon"></i> Actions</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <h4><i class="fas fa-money-bill fa-icon"></i> Total Actual Revenue: GHC{{ "%.2f"|format(total_actual_revenue) }}</h4>
-      <h4><i class="fas fa-money-bill-alt fa-icon"></i> Total Lost Revenue: GHC{{ "%.2f"|format(total_lost_revenue) }}</h4>
-    {% else %}
-      <p><i class="fas fa-exclamation-circle fa-icon"></i> You have not created any events yet.</p>
-    {% endif %}
+          </thead>
+          <tbody class="dashboard__table-body">
+            {% for event in events_data %}
+              <tr class="dashboard__table-row">
+                <td class="dashboard__table-cell">{{ event.title }}</td>
+                <td class="dashboard__table-cell">{{ event.event_date.strftime('%Y-%m-%d %I:%M %p') }}</td>
+                <td class="dashboard__table-cell">{{ event.total_tickets }}</td>
+                <td class="dashboard__table-cell">{{ event.tickets_sold }}</td>
+                <td class="dashboard__table-cell">{{ event.tickets_remaining }}</td>
+                <td class="dashboard__table-cell">GHC{{ "%.2f"|format(event.actual_revenue) }}</td>
+                <td class="dashboard__table-cell">GHC{{ "%.2f"|format(event.lost_revenue) }}</td>
+                <td class="dashboard__table-cell">
+                  <a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn btn--primary">
+                    <i class="fas fa-edit fa-icon"></i> Edit
+                  </a>
+                  <form action="{{ url_for('events.delete_event', event_id=event.id) }}" method="POST" class="dashboard__form-inline">
+                    <button type="submit" class="btn btn--secondary" onclick="return confirm('Are you sure you want to delete this event?');">
+                      <i class="fas fa-trash fa-icon"></i> Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="dashboard__totals">
+          <h4 class="dashboard__total"><i class="fas fa-money-bill fa-icon"></i> Total Actual Revenue: GHC{{ "%.2f"|format(total_actual_revenue) }}</h4>
+          <h4 class="dashboard__total"><i class="fas fa-money-bill-alt fa-icon"></i> Total Lost Revenue: GHC{{ "%.2f"|format(total_lost_revenue) }}</h4>
+        </div>
+      {% else %}
+        <p class="dashboard__none"><i class="fas fa-exclamation-circle fa-icon"></i> You have not created any events yet.</p>
+      {% endif %}
+    </section>
+
+    <!-- New Check-In Scanner Section -->
+    <section class="dashboard__checkin">
+      <h3 class="dashboard__subtitle"><i class="fas fa-qrcode fa-icon"></i> Ticket Check-In</h3>
+      <p class="dashboard__desc">Launch the QR Code scanner to validate tickets at the event.</p>
+      <a href="{{ url_for('checkin.checkin_page') }}" class="btn btn--primary">
+        <i class="fas fa-camera fa-icon"></i> Launch Scanner
+      </a>
+    </section>
   {% endif %}
-</section>
+</main>
 {% endblock %}

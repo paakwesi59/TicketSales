@@ -26,7 +26,9 @@ def create_app(config_class=Config):
     from routes.auth import auth as auth_blueprint
     from routes.events import events as events_blueprint
     from routes.tickets import tickets as tickets_blueprint
+    from routes.checkin import checkin
 
+    app.register_blueprint(checkin)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(events_blueprint)
     app.register_blueprint(tickets_blueprint)

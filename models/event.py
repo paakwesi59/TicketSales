@@ -1,3 +1,4 @@
+
 # models/event.py
 from datetime import datetime
 from models import db
