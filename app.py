@@ -1,4 +1,7 @@
 # app.py
+
+from dotenv import load_dotenv
+load_dotenv()  # Loads environment variables from a .env file into os.environ
 from flask import Flask
 from config import Config
 from extensions import db, bcrypt, mail, migrate, login_manager
