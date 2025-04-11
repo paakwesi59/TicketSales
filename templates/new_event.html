@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Create New Event - Ticket Sales Platform{% endblock %}
 {% block content %}
-<section class="form-container">
-  <h2 class="form-container__title"><i class="fas fa-plus-circle fa-icon"></i> Create New Event</h2>
+<section class="form-container" aria-labelledby="new-event-title">
+  <h2 id="new-event-title" class="form-container__title">
+    <i class="fas fa-plus-circle fa-icon" aria-hidden="true"></i> Create New Event
+  </h2>
   <form method="POST" action="{{ url_for('events.new_event') }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {% for field, icon in [
@@ -20,7 +22,9 @@
       (form.image, 'fa-image')
     ] %}
       <div class="form-group">
-        <label class="form-group__label" for="{{ field.id }}"><i class="fas {{ icon }} fa-icon"></i> {{ field.label.text }}</label>
+        <label class="form-group__label" for="{{ field.id }}">
+          <i class="fas {{ icon }} fa-icon" aria-hidden="true"></i> {{ field.label.text }}
+        </label>
         {{ field(class="form-group__input", id=field.id) }}
         {% for error in field.errors %}
           <span class="form-group__error">{{ error }}</span>
@@ -28,7 +32,9 @@
       </div>
     {% endfor %}
     <div class="form-group">
-      <button type="submit" class="btn"><i class="fas fa-save fa-icon"></i> Create Event</button>
+      <button type="submit" class="btn">
+        <i class="fas fa-save fa-icon" aria-hidden="true"></i> Create Event
+      </button>
     </div>
   </form>
 </section>

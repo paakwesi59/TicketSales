@@ -1,23 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Checkout - {{ event.title }}{% endblock %}
 {% block content %}
-<section class="form-container">
-  <h2 class="form-container__title"><i class="fas fa-shopping-cart fa-icon"></i> Checkout</h2>
-  <p><i class="fas fa-calendar-alt fa-icon"></i> <strong>Event:</strong> {{ event.title }}</p>
-  <p><i class="fas fa-ticket-alt fa-icon"></i> <strong>Ticket Price:</strong> GHC{{ "%.2f"|format(event.price) }}</p>
-  <p><i class="fas fa-sort-numeric-up fa-icon"></i> <strong>Quantity:</strong> {{ quantity }}</p>
-  <p><i class="fas fa-money-bill fa-icon"></i> <strong>Base Total Price:</strong> GHC{{ "%.2f"|format(total_price) }}</p>
+<section class="form-container" aria-labelledby="checkout-title">
+  <h2 id="checkout-title" class="form-container__title">
+    <i class="fas fa-shopping-cart fa-icon" aria-hidden="true"></i>
+    Checkout
+  </h2>
+  <p><i class="fas fa-calendar-alt fa-icon" aria-hidden="true"></i> <strong>Event:</strong> {{ event.title }}</p>
+  <p><i class="fas fa-ticket-alt fa-icon" aria-hidden="true"></i> <strong>Ticket Price:</strong> GHC{{ "%.2f"|format(event.price) }}</p>
+  <p><i class="fas fa-sort-numeric-up fa-icon" aria-hidden="true"></i> <strong>Quantity:</strong> {{ quantity }}</p>
+  <p><i class="fas fa-money-bill fa-icon" aria-hidden="true"></i> <strong>Base Total Price:</strong> GHC{{ "%.2f"|format(total_price) }}</p>
   {% if discount > 0 %}
-    <p><i class="fas fa-tag fa-icon"></i> <strong>Discount Applied:</strong> GHC{{ "%.2f"|format(discount) }}</p>
+    <p><i class="fas fa-tag fa-icon" aria-hidden="true"></i> <strong>Discount Applied:</strong> GHC{{ "%.2f"|format(discount) }}</p>
   {% endif %}
   {% if free_tickets > 0 %}
-    <p><i class="fas fa-gift fa-icon"></i> <strong>Free Tickets Awarded:</strong> {{ free_tickets }}</p>
+    <p><i class="fas fa-gift fa-icon" aria-hidden="true"></i> <strong>Free Tickets Awarded:</strong> {{ free_tickets }}</p>
   {% endif %}
-  <p><i class="fas fa-wallet fa-icon"></i> <strong>Final Total Price:</strong> GHC{{ "%.2f"|format(final_price) }}</p>
+  <p><i class="fas fa-wallet fa-icon" aria-hidden="true"></i> <strong>Final Total Price:</strong> GHC{{ "%.2f"|format(final_price) }}</p>
   <form method="POST" action="{{ url_for('tickets.confirm_purchase', event_id=event.id) }}">
     <input type="hidden" name="email" value="{{ email }}">
     <input type="hidden" name="quantity" value="{{ quantity }}">
-    <button type="submit" class="btn"><i class="fas fa-check fa-icon"></i> Confirm Purchase</button>
+    <button type="submit" class="btn">
+      <i class="fas fa-check fa-icon" aria-hidden="true"></i> Confirm Purchase
+    </button>
   </form>
 </section>
 {% endblock %}

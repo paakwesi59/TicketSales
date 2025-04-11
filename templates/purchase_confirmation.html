@@ -1,22 +1,44 @@
 {% extends "base.html" %}
 {% block title %}Purchase Confirmation - {{ event.title }}{% endblock %}
 {% block content %}
-<section class="container">
-  <h2><i class="fas fa-check-circle fa-icon"></i> Purchase Confirmation</h2>
+<section class="container" aria-labelledby="purchase-confirmation-title">
+  <h2 id="purchase-confirmation-title">
+    <i class="fas fa-check-circle fa-icon" aria-hidden="true"></i> Purchase Confirmation
+  </h2>
   <p>You have successfully purchased {{ quantity }} ticket(s) for the event: <strong>{{ event.title }}</strong>.</p>
   <div class="ticket-cards">
     {% for ticket in tickets %}
-      <article class="ticket-card">
+      <article class="ticket-card" tabindex="0">
         <h3>{{ event.title }}</h3>
-        <p><i class="fas fa-calendar-alt fa-icon"></i> <strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
-        <p><i class="fas fa-map-marker-alt fa-icon"></i> <strong>Venue:</strong> {{ event.venue }}</p>
-        <p><i class="fas fa-ticket-alt fa-icon"></i> <strong>Ticket Code:</strong> {{ ticket.ticket_code }}</p>
-        <img src="{{ url_for('static', filename='tickets_qr/' ~ ticket.qr_code_filename) }}" alt="QR Code" class="ticket-card__image">
-        <p><a href="{{ url_for('tickets.download_ticket', ticket_id=ticket.id, token=ticket.ticket_code) }}" class="btn"><i class="fas fa-download fa-icon"></i> Download E-Ticket</a></p>
+        <p>
+          <i class="fas fa-calendar-alt fa-icon" aria-hidden="true"></i>
+          <strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}
+        </p>
+        <p>
+          <i class="fas fa-map-marker-alt fa-icon" aria-hidden="true"></i>
+          <strong>Venue:</strong> {{ event.venue }}
+        </p>
+        <p>
+          <i class="fas fa-ticket-alt fa-icon" aria-hidden="true"></i>
+          <strong>Ticket Code:</strong> {{ ticket.ticket_code }}
+        </p>
+        <img src="{{ url_for('static', filename='tickets_qr/' ~ ticket.qr_code_filename) }}" alt="QR Code for {{ event.title }}" class="ticket-card__image">
+        <p>
+          <a href="{{ url_for('tickets.download_ticket', ticket_id=ticket.id, token=ticket.ticket_code) }}" class="btn">
+            <i class="fas fa-download fa-icon" aria-hidden="true"></i> Download E-Ticket
+          </a>
+        </p>
       </article>
     {% endfor %}
   </div>
-  <p><i class="fas fa-envelope fa-icon"></i> An email with your ticket details has been sent to your email address.</p>
-  <p><a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn"><i class="fas fa-arrow-left fa-icon"></i> Back to Event Details</a></p>
+  <p>
+    <i class="fas fa-envelope fa-icon" aria-hidden="true"></i>
+    An email with your ticket details has been sent to your email address.
+  </p>
+  <p>
+    <a href="{{ url_for('events.event_detail', event_id=event.id) }}" class="btn">
+      <i class="fas fa-arrow-left fa-icon" aria-hidden="true"></i> Back to Event Details
+    </a>
+  </p>
 </section>
 {% endblock %}

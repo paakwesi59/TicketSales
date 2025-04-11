@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Edit Event - Ticket Sales Platform{% endblock %}
 {% block content %}
-<section class="form-container">
-  <h2 class="form-container__title"><i class="fas fa-edit fa-icon"></i> Edit Event</h2>
+<section class="form-container" aria-labelledby="edit-event-title">
+  <h2 id="edit-event-title" class="form-container__title">
+    <i class="fas fa-edit fa-icon" aria-hidden="true"></i>
+    Edit Event
+  </h2>
   <form method="POST" action="{{ url_for('events.edit_event', event_id=event.id) }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {% for field, icon in [
@@ -20,7 +23,10 @@
       (form.image, 'fa-image')
     ] %}
       <div class="form-group">
-        <label class="form-group__label" for="{{ field.id }}"><i class="fas {{ icon }} fa-icon"></i> {{ field.label.text }}</label>
+        <label class="form-group__label" for="{{ field.id }}">
+          <i class="fas {{ icon }} fa-icon" aria-hidden="true"></i>
+          {{ field.label.text }}
+        </label>
         {{ field(class="form-group__input", id=field.id) }}
         {% for error in field.errors %}
           <span class="form-group__error">{{ error }}</span>
@@ -29,12 +35,16 @@
     {% endfor %}
     {% if event.image %}
       <div class="form-group">
-        <label class="form-group__label"><i class="fas fa-image fa-icon"></i> Current Image:</label>
-        <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="Event Image" class="event-card__image">
+        <label class="form-group__label">
+          <i class="fas fa-image fa-icon" aria-hidden="true"></i> Current Image:
+        </label>
+        <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="Current image for {{ event.title }}" class="event-card__image">
       </div>
     {% endif %}
     <div class="form-group">
-      <button type="submit" class="btn"><i class="fas fa-save fa-icon"></i> Save Changes</button>
+      <button type="submit" class="btn">
+        <i class="fas fa-save fa-icon" aria-hidden="true"></i> Save Changes
+      </button>
     </div>
   </form>
 </section>

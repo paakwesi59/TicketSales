@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Register - Ticket Sales Platform{% endblock %}
 {% block content %}
-<section class="form-container">
-  <h2 class="form-container__title"><i class="fas fa-user-plus fa-icon"></i> Register</h2>
+<section class="form-container" aria-labelledby="register-title">
+  <h2 id="register-title" class="form-container__title">
+    <i class="fas fa-user-plus fa-icon" aria-hidden="true"></i> Register
+  </h2>
   <form method="POST" action="{{ url_for('auth.register') }}">
     {{ form.hidden_tag() }}
     {% for field, icon in [
@@ -13,7 +15,9 @@
       (form.user_type, 'fa-users')
     ] %}
       <div class="form-group">
-        <label class="form-group__label" for="{{ field.id }}"><i class="fas {{ icon }} fa-icon"></i> {{ field.label.text }}</label>
+        <label class="form-group__label" for="{{ field.id }}">
+          <i class="fas {{ icon }} fa-icon" aria-hidden="true"></i> {{ field.label.text }}
+        </label>
         {{ field(class="form-group__input", id=field.id) }}
         {% for error in field.errors %}
           <span class="form-group__error">{{ error }}</span>
@@ -21,9 +25,14 @@
       </div>
     {% endfor %}
     <div class="form-group">
-      <button type="submit" class="btn"><i class="fas fa-user-plus fa-icon"></i> Register</button>
+      <button type="submit" class="btn">
+        <i class="fas fa-user-plus fa-icon" aria-hidden="true"></i> Register
+      </button>
     </div>
   </form>
-  <p><i class="fas fa-sign-in-alt fa-icon"></i> Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+  <p>
+    <i class="fas fa-sign-in-alt fa-icon" aria-hidden="true"></i>
+    Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>
+  </p>
 </section>
 {% endblock %}

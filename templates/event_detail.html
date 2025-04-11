@@ -1,29 +1,60 @@
 {% extends "base.html" %}
 {% block title %}Event Details - {{ event.title }}{% endblock %}
 {% block content %}
-<section class="container">
-  <h2>{{ event.title }}</h2>
+<article class="container" aria-labelledby="event-detail-title">
+  <h2 id="event-detail-title">{{ event.title }}</h2>
   {% if event.image %}
-    <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }}" class="event-card__image">
+    <img src="{{ url_for('static', filename='event_images/' ~ event.image) }}" alt="{{ event.title }} image" class="event-card__image">
   {% endif %}
   <p>{{ event.description }}</p>
-  <p><i class="fas fa-calendar-alt fa-icon"></i> <strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}</p>
-  <p><i class="fas fa-map-marker-alt fa-icon"></i> <strong>Venue:</strong> {{ event.venue }}</p>
-  <p><i class="fas fa-clock fa-icon"></i> <strong>Duration:</strong> {{ event.duration }} hour{{ 's' if event.duration != 1 else '' }}</p>
-  <p><i class="fas fa-money-bill fa-icon"></i> <strong>Ticket Price:</strong> GHC{{ event.price }}</p>
+  <p>
+    <i class="fas fa-calendar-alt fa-icon" aria-hidden="true"></i>
+    <strong>Date & Time:</strong> {{ event.event_date.strftime('%B %d, %Y %I:%M %p') }}
+  </p>
+  <p>
+    <i class="fas fa-map-marker-alt fa-icon" aria-hidden="true"></i>
+    <strong>Venue:</strong> {{ event.venue }}
+  </p>
+  <p>
+    <i class="fas fa-clock fa-icon" aria-hidden="true"></i>
+    <strong>Duration:</strong> {{ event.duration }} hour{{ 's' if event.duration != 1 else '' }}
+  </p>
+  <p>
+    <i class="fas fa-money-bill fa-icon" aria-hidden="true"></i>
+    <strong>Ticket Price:</strong> GHC{{ event.price }}
+  </p>
   {% if event.bulk_min_tickets and event.bulk_discount_percent %}
-    <p><i class="fas fa-tag fa-icon"></i> <strong>Bulk Purchase Offer:</strong> Buy at least {{ event.bulk_min_tickets }} tickets to receive a {{ event.bulk_discount_percent }}% discount.</p>
+    <p>
+      <i class="fas fa-tag fa-icon" aria-hidden="true"></i>
+      <strong>Bulk Purchase Offer:</strong>
+      Buy at least {{ event.bulk_min_tickets }} tickets to receive a {{ event.bulk_discount_percent }}% discount.
+    </p>
   {% endif %}
   {% if event.free_ticket_min and event.free_tickets %}
-    <p><i class="fas fa-gift fa-icon"></i> <strong>Free Tickets Offer:</strong> Buy at least {{ event.free_ticket_min }} tickets to receive {{ event.free_tickets }} free ticket{{ 's' if event.free_tickets > 1 else '' }}.</p>
+    <p>
+      <i class="fas fa-gift fa-icon" aria-hidden="true"></i>
+      <strong>Free Tickets Offer:</strong>
+      Buy at least {{ event.free_ticket_min }} tickets to receive {{ event.free_tickets }} free ticket{{ 's' if event.free_tickets > 1 else '' }}.
+    </p>
   {% endif %}
   {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}
     <hr>
-    <p><i class="fas fa-ticket-alt fa-icon"></i> <strong>Total Tickets:</strong> {{ event.total_tickets }}</p>
-    <p><i class="fas fa-tickets fa-icon"></i> <strong>Tickets Sold:</strong> {{ event.tickets_sold }}</p>
-    <p><i class="fas fa-ticket-alt fa-icon"></i> <strong>Remaining Tickets:</strong> {{ event.total_tickets - event.tickets_sold }}</p>
+    <p>
+      <i class="fas fa-ticket-alt fa-icon" aria-hidden="true"></i>
+      <strong>Total Tickets:</strong> {{ event.total_tickets }}
+    </p>
+    <p>
+      <i class="fas fa-tickets fa-icon" aria-hidden="true"></i>
+      <strong>Tickets Sold:</strong> {{ event.tickets_sold }}
+    </p>
+    <p>
+      <i class="fas fa-ticket-alt fa-icon" aria-hidden="true"></i>
+      <strong>Remaining Tickets:</strong> {{ event.total_tickets - event.tickets_sold }}
+    </p>
   {% endif %}
-  <p id="countdown"><i class="fas fa-hourglass-start fa-icon"></i> </p>
+  <p id="countdown" aria-live="polite">
+    <i class="fas fa-hourglass-start fa-icon" aria-hidden="true"></i>
+  </p>
   <script>
     const eventDate = new Date("{{ event.event_date.isoformat() }}");
     const countdownElement = document.getElementById("countdown");
@@ -31,7 +62,7 @@
       const now = new Date();
       const diff = eventDate - now;
       if (diff <= 0) {
-        countdownElement.innerHTML = "<i class='fas fa-hourglass-end fa-icon'></i> The event has started!";
+        countdownElement.innerHTML = "<i class='fas fa-hourglass-end fa-icon' aria-hidden='true'></i> The event has started!";
         clearInterval(timerInterval);
         return;
       }
@@ -39,16 +70,24 @@
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
-      countdownElement.innerHTML = `<i class="fas fa-hourglass-start fa-icon"></i> Starts in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      countdownElement.innerHTML = `<i class="fas fa-hourglass-start fa-icon" aria-hidden="true"></i> Starts in ${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
     const timerInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
   </script>
   {% if not (current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by) %}
-    <p><a href="{{ url_for('tickets.buy_ticket', event_id=event.id) }}" class="btn"><i class="fas fa-shopping-cart fa-icon"></i> Buy Tickets</a></p>
+    <p>
+      <a href="{{ url_for('tickets.buy_ticket', event_id=event.id) }}" class="btn">
+        <i class="fas fa-shopping-cart fa-icon" aria-hidden="true"></i> Buy Tickets
+      </a>
+    </p>
   {% endif %}
   {% if current_user.is_authenticated and current_user.user_type == 'event_organizer' and current_user.id == event.created_by %}
-    <p><a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn"><i class="fas fa-edit fa-icon"></i> Edit Event</a></p>
+    <p>
+      <a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn">
+        <i class="fas fa-edit fa-icon" aria-hidden="true"></i> Edit Event
+      </a>
+    </p>
   {% endif %}
-</section>
+</article>
 {% endblock %}

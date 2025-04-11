@@ -1,29 +1,26 @@
 {% extends "base.html" %}
 {% block title %}Ticket Check-In{% endblock %}
 {% block content %}
-<main class="checkin container">
-  <!-- QR Code Scanner Section -->
-  <section class="checkin__scanner-section">
-    <h2 class="checkin__title">QR Code Check-In</h2>
-    <div id="reader" class="checkin__reader" style="max-width: 400px; margin: auto;"></div>
-    <div id="result" class="checkin__result"></div>
-  </section>
+<section class="checkin container">
+  <div class="checkin__scanner-section" aria-labelledby="checkin-title">
+    <h2 id="checkin-title" class="checkin__title">QR Code Check-In</h2>
+    <div id="reader" class="checkin__reader" aria-label="QR Code Scanner"></div>
+    <div id="result" class="checkin__result" aria-live="polite"></div>
+  </div>
 
-  <!-- Live Attendance Tracking Section -->
-  <section class="checkin__attendance">
-    <h3 class="checkin__attendance-title">Live Attendance Tracking</h3>
+  <div class="checkin__attendance" aria-labelledby="attendance-title">
+    <h3 id="attendance-title" class="checkin__attendance-title">Live Attendance Tracking</h3>
     <div class="checkin__attendance-info">
       <p>Total Tickets: <span id="total-tickets">...</span></p>
       <p>Checked In: <span id="checked-in">...</span></p>
       <p>Remaining: <span id="remaining">...</span></p>
     </div>
-  </section>
-</main>
+  </div>
+</section>
 
-<!-- Include the html5-qrcode library -->
+<!-- Include html5-qrcode library -->
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-  // Called when a QR code is successfully scanned
   function onScanSuccess(decodedText) {
     fetch("{{ url_for('checkin.validate_qr_code') }}", {
       method: "POST",
@@ -34,37 +31,24 @@
     .then(data => {
       const resultDiv = document.getElementById("result");
       if (data.success) {
-        if (data.already_checked_in) {
-          resultDiv.innerHTML = `<p class="checkin__message checkin__message--warning">Already checked in at ${data.check_in_time}</p>`;
-        } else {
-          resultDiv.innerHTML = `<p class="checkin__message checkin__message--success">${data.message}</p>`;
-        }
+        resultDiv.innerHTML = data.already_checked_in
+          ? `<p class="checkin__message checkin__message--warning">Already checked in at ${data.check_in_time}</p>`
+          : `<p class="checkin__message checkin__message--success">${data.message}</p>`;
       } else {
         resultDiv.innerHTML = `<p class="checkin__message checkin__message--error">${data.message}</p>`;
       }
-      // Refresh attendance data after scan
       fetchAttendance();
     })
-    .catch(err => {
-      console.error(err);
-    });
+    .catch(err => console.error(err));
   }
 
-  // Initialize the QR code scanner
   const html5QrCode = new Html5Qrcode("reader");
   Html5Qrcode.getCameras().then(cameras => {
     if (cameras && cameras.length) {
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess
-      );
+      html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
     }
-  }).catch(err => {
-    console.error("Error getting cameras: ", err);
-  });
+  }).catch(err => console.error("Error getting cameras: ", err));
 
-  // Function to fetch live attendance data
   function fetchAttendance() {
     fetch("{{ url_for('checkin.live_attendance', event_id=event.id) }}")
       .then(response => response.json())
@@ -77,8 +61,6 @@
       })
       .catch(err => console.error("Error fetching attendance: ", err));
   }
-
-  // Poll attendance data every 5 seconds
   setInterval(fetchAttendance, 5000);
   fetchAttendance();
 </script>
